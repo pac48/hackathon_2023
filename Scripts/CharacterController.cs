@@ -6,11 +6,14 @@ public class CharacterController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float rotationSpeed = 100f;
+    public float acceleration = 2f;
+    public float deceleration = 4f;
 
     private Rigidbody2D rb;
 
-    private bool canTurn = false;
     private bool reverse = false;
+    private float currentSpeed = 0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,24 +27,27 @@ public class CharacterController : MonoBehaviour
         // Move forward/backward
         if (Input.GetKey(KeyCode.W))
         {
-            rb.velocity = transform.up * moveSpeed;
-            canTurn = true;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, moveSpeed, acceleration * Time.deltaTime);
+            rb.velocity = transform.up * currentSpeed;
             reverse = false;
+      
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            rb.velocity = -transform.up * moveSpeed;
-            canTurn = true;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, -moveSpeed, acceleration * Time.deltaTime);
+            rb.velocity = transform.up * currentSpeed;
             reverse = true;
+           
         }
         else
         {
-            rb.velocity = Vector2.zero;
-            canTurn = false;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, deceleration * Time.deltaTime);
+            rb.velocity = transform.up * currentSpeed;
+
         }
 
         // Rotate left/right if moving
-        if (canTurn)
+        if(currentSpeed != 0f)
         {
             
             if (Input.GetKey(KeyCode.A))
