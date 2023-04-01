@@ -567,7 +567,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209222520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.11, y: 3, z: -0.5}
+  m_LocalPosition: {x: -2.11, y: 3, z: -1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -588,6 +588,7 @@ GameObject:
   - component: {fileID: 1543542487}
   - component: {fileID: 1543542486}
   - component: {fileID: 1543542485}
+  - component: {fileID: 1543542489}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -630,6 +631,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 100
+  acceleration: 2
+  deceleration: 4
 --- !u!212 &1543542487
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -697,3 +700,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1543542489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543542484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46127de32a06f798b898a576f9f007bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transform: {fileID: 1209222521}
+  carTransform: {fileID: 1543542488}
