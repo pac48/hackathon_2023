@@ -1,15 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Spotmanager : MonoBehaviour
 {
-    // Store data for each child empty
+    public Transform player;
+    // The range in which the character can ticket an empty spot
+     public float ticketRange = 2f;
+    public int score = 0;
+    private int ticketedSpotIndex = -1;
+    private float ticketTimeRemaining = 0f;
+    public float ticketTime = 5f;
+
+    public float timeToSelect = 10f;
+    private Slider[] spotSliders;
+    public float spawnRate = .05f;
+
     public struct ChildData
     {
         public Vector3 localPosition;
         public Quaternion localRotation;
         public bool taken;
+        public bool ticketed;
     }
 
     // Array to store data for each child empty
@@ -53,6 +66,19 @@ public class Spotmanager : MonoBehaviour
             Quaternion spawnRot = childData[randIndex].localRotation;
             Instantiate(prefab, spawnPos, spawnRot);
         }
+
+        //timers for the sliders behind the spots
+        spotSliders = new Slider[childCount];
+        for (int i = 0; i < childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            spotSliders[i] = child.GetComponentInChildren<Slider>();
+            spotSliders[i].gameObject.SetActive(false);
+            childData[i].localPosition = child.localPosition;
+            childData[i].localRotation = child.localRotation;
+        }
+
+    
     }
 
     // Example function to get data for a specific child empty
@@ -67,6 +93,64 @@ public class Spotmanager : MonoBehaviour
         childData[childIndex].taken = taken;
     }
 
+    public void SetChildTicketed(int ticketedSpotIndex, bool ticketed) {
+        childData[ticketedSpotIndex].ticketed = ticketed;
+    }
+    
 
+    private void Update()
+    {
+        float spawnChance = spawnRate * Time.deltaTime;
+    
+        if (Random.value < spawnChance)
+        {
+            int randIndex = Random.Range(0, transform.childCount);
+            Transform spot = transform.GetChild(randIndex);
+        
+            if (!GetChildData(randIndex).ticketed && randIndex != ticketedSpotIndex)
+            {
+                // Start ticketing the spot if not already taken or ticketed
+                ticketedSpotIndex = randIndex;
+                ticketTimeRemaining = ticketTime;
+                spotSliders[ticketedSpotIndex].gameObject.SetActive(true);
+            }
+        }
 
+        if (ticketedSpotIndex != -1)
+        {
+            Transform spot = transform.GetChild(ticketedSpotIndex);
+
+            if (ticketTimeRemaining <= 0f)
+            {
+                // Ticket time expired
+                SetChildTicketed(ticketedSpotIndex, true);
+                ticketedSpotIndex = -1;
+                ticketTimeRemaining = 0f;
+                spotSliders[ticketedSpotIndex].gameObject.SetActive(false);
+            }
+            else if (Input.GetKeyDown(KeyCode.E) && Vector2.Distance(player.transform.position, spot.position) <= ticketRange)
+            {
+                // Ticket the spot
+                SetChildTicketed(ticketedSpotIndex, true);
+                score += 50;
+
+                // Reset ticketing state
+                ticketedSpotIndex = -1;
+                ticketTimeRemaining = 0f;
+                spotSliders[ticketedSpotIndex].gameObject.SetActive(false);
+            }
+            else
+            {
+                // Update the ticket time remaining and slider
+                ticketTimeRemaining -= Time.deltaTime;
+                spotSliders[ticketedSpotIndex].value = ticketTimeRemaining / ticketTime;
+            }
+        }
+    }
+    
 }
+
+
+
+
+
