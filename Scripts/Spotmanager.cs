@@ -63,6 +63,7 @@ public class Spotmanager : MonoBehaviour
     {
         childData[childIndex].taken = taken;
     }
+    
 
 
 }
