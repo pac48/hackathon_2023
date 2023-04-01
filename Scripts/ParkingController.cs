@@ -6,11 +6,13 @@ using System.IO;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
+
+using UnityEngine.AI;
 public class ParkingController : MonoBehaviour
 {
     private bool isRecording = false;
     private float currentTime;
-
+    
     private List<Transform> targets;
     private List<float> data;
     
@@ -18,16 +20,14 @@ public class ParkingController : MonoBehaviour
     public Transform transform;
     public Transform carTransform;
     
+    [SerializeField] NavMeshAgent agent;
     
     // Start is called before the first frame update
     void Start()
     {
         currentTime = Time.time;
-
-        Matrix<double> matrix = Matrix<double>.Build.Dense(3, 3, new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
-        Debug.Log("Matrix: ");
-        Debug.Log(matrix.ToString());
-        
+        agent.enabled = true;
+        agent.SetDestination(transform.position);
     }
 
 
