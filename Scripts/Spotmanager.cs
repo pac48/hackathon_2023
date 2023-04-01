@@ -7,7 +7,8 @@ public class Spotmanager : MonoBehaviour
     // Store data for each child empty
     public struct ChildData
     {
-        public Vector3 position;
+        public Vector3 localPosition;
+        public Quaternion localRotation;
         public bool taken;
     }
 
@@ -31,7 +32,8 @@ public class Spotmanager : MonoBehaviour
         for (int i = 0; i < childCount; i++)
         {
             Transform child = transform.GetChild(i);
-            childData[i].position = child.position;
+            childData[i].localPosition = child.localPosition;
+            childData[i].localRotation = child.localRotation;
             childData[i].taken = false;
         }
 
@@ -47,8 +49,9 @@ public class Spotmanager : MonoBehaviour
             int ranIndex1 = Random.Range(0, prefabsToSpawn.Length);
             GameObject prefab = prefabsToSpawn[ranIndex1];
             childData[randIndex].taken = true;
-            Vector3 spawnPos = childData[randIndex].position;
-            Instantiate(prefab, spawnPos, Quaternion.identity);
+            Vector3 spawnPos = childData[randIndex].localPosition;
+            Quaternion spawnRot = childData[randIndex].localRotation;
+            Instantiate(prefab, spawnPos, spawnRot);
         }
     }
 
@@ -63,7 +66,7 @@ public class Spotmanager : MonoBehaviour
     {
         childData[childIndex].taken = taken;
     }
-    
+
 
 
 }
