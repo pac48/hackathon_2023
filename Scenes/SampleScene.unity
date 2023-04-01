@@ -243,7 +243,7 @@ RectTransform:
   m_GameObject: {fileID: 40857287}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1081035073}
@@ -256,7 +256,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3, y: 469}
+  m_AnchoredPosition: {x: 3, y: 478}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &40857289
@@ -2537,7 +2537,7 @@ GameObject:
   - component: {fileID: 1485320712}
   - component: {fileID: 1485320713}
   m_Layer: 0
-  m_Name: Audi
+  m_Name: Parking_Van
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2621,7 +2621,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f9128a86e58724885858d71e7de72fb2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d4a54f8fa1d70483eb1574b63533717c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2641,7 +2641,7 @@ Transform:
   m_GameObject: {fileID: 1485320707}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2673,7 +2673,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0067675114, y: -0.04516709}
+  m_Offset: {x: -0.06490183, y: 0.045263886}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2684,7 +2684,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.84605443, y: 2.1189559}
+  m_Size: {x: 0.6781111, y: 1.8605816}
   m_EdgeRadius: 0
 --- !u!1 &1496502577
 GameObject:
@@ -3546,11 +3546,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabsToSpawn:
-  - {fileID: 7400529570766275207, guid: d90901446ac144756b91676b07436632, type: 3}
-  - {fileID: 9150826949903103656, guid: 5930b25ac4423480c904d46bf6391684, type: 3}
-  - {fileID: 8739599537178327376, guid: ffc52b88d596e4399a8fe1a794625abd, type: 3}
   - {fileID: 1990888512844181427, guid: 2d53e247a572e44c4ac3d458eaf4a0c7, type: 3}
-  - {fileID: 6989425603808823375, guid: ede2c225218084407856a274ad51ebb7, type: 3}
+  - {fileID: 7471326715040291348, guid: 9a5081ad356c54a2baf17abeeb28e9d4, type: 3}
+  - {fileID: 8739599537178327376, guid: ffc52b88d596e4399a8fe1a794625abd, type: 3}
+  - {fileID: 981007389797349743, guid: fcae0826d10324681a88f43c7334e700, type: 3}
+  - {fileID: 9150826949903103656, guid: 5930b25ac4423480c904d46bf6391684, type: 3}
+  - {fileID: 7400529570766275207, guid: d90901446ac144756b91676b07436632, type: 3}
+  - {fileID: 1749010873263920246, guid: 5cd9041b9511941b693eb91f2e96d21d, type: 3}
+  - {fileID: 5248414047798531717, guid: 0eaae4e74e8204735abda21434733ba8, type: 3}
   spawnPercentage: 60
 --- !u!4 &1902835344
 Transform:
