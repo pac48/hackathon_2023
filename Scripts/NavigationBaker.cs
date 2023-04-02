@@ -6,16 +6,24 @@ using UnityEngine;
 using NavMeshPlus.Components;
 public class NavigationBaker : MonoBehaviour {
 
-    public NavMeshSurface[] surfaces;
+    public NavMeshSurface[] surfaces; 
+    private int ind = 0;
 
     // Use this for initialization
-    void Update () 
+    void Update ()
     {
-
-        for (int i = 0; i < surfaces.Length; i++) 
+        ind += 1;
+        if (ind == 30)
         {
-            surfaces [i].BuildNavMesh ();    
-        }    
+            for (int i = 0; i < surfaces.Length; i++) 
+            {
+                surfaces [i].BuildNavMesh ();    
+            }
+
+            ind = 0;
+        }
+
+            
     }
 
 }

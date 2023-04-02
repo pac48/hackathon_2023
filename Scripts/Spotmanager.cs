@@ -61,6 +61,9 @@ public class Spotmanager : MonoBehaviour
             }
             int ranIndex1 = Random.Range(0, prefabsToSpawn.Length);
             GameObject prefab = prefabsToSpawn[ranIndex1];
+            ParkingController parkingController = prefab.GetComponent<ParkingController>();
+            parkingController.setTransformTarget(childData[0].localPosition);
+            
             childData[randIndex].taken = true;
             Vector3 spawnPos = childData[randIndex].localPosition;
             Quaternion spawnRot = childData[randIndex].localRotation;
