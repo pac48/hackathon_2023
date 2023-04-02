@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class Spotmanager : MonoBehaviour
 {
     public Transform player;
@@ -14,8 +13,12 @@ public class Spotmanager : MonoBehaviour
     public float ticketTime = 5f;
 
     public float timeToSelect = 10f;
-    private Slider[] spotSliders;
+    
+    public GameObject slider1;
     public float spawnRate = .05f;
+    public Vector3 offset1 = Vector3.up;
+    public Quaternion offset2 = Quaternion.Euler(0f, 180f, 0f);
+    public int numToSpawn;
 
     public struct ChildData
     {
@@ -24,10 +27,20 @@ public class Spotmanager : MonoBehaviour
         public bool taken;
         public bool ticketed;
     }
+    public struct SliderStruct
+    {
+        public Vector3 localPosition;
+        public Quaternion localRotation;
+        public GameObject slider;
+        public Transform transform;
+        public float finTicketTime;
+    
+    }
+    
 
     // Array to store data for each child empty
     private ChildData[] childData;
-
+    private SliderStruct[] Sliderstruct;
     // The prefab to instantiate
     public GameObject[] prefabsToSpawn;
 
@@ -51,7 +64,9 @@ public class Spotmanager : MonoBehaviour
         }
 
         // Instantiate the prefab at a random position within the specified percentage of child transforms
-        int numToSpawn = Mathf.RoundToInt(childCount * (spawnPercentage / 100f));
+        numToSpawn = Mathf.RoundToInt(childCount * (spawnPercentage / 100f));
+        Sliderstruct = new SliderStruct[numToSpawn];
+
         for (int i = 0; i < numToSpawn; i++)
         {
             int randIndex = Random.Range(0, childCount);
@@ -66,18 +81,14 @@ public class Spotmanager : MonoBehaviour
             Quaternion spawnRot = childData[randIndex].localRotation;
             Instantiate(prefab, spawnPos, spawnRot);
         }
-
         //timers for the sliders behind the spots
-        spotSliders = new Slider[childCount];
-        for (int i = 0; i < childCount; i++)
-        {
+        for (int i = 0; i < transform.childCount; i++) {
             Transform child = transform.GetChild(i);
-            spotSliders[i] = child.GetComponentInChildren<Slider>();
-            spotSliders[i].gameObject.SetActive(false);
-            childData[i].localPosition = child.localPosition;
-            childData[i].localRotation = child.localRotation;
+            Sliderstruct[i].transform = child;
+            Sliderstruct[i].slider = Instantiate(slider1, child.transform.position + offset1, Quaternion.Euler(0f,0f,0f));
+            Sliderstruct[i].slider.transform.rotation *= Quaternion.Euler(0f,180f,0);
+            Sliderstruct[i].slider.SetActive(false);
         }
-
     
     }
 
@@ -96,6 +107,14 @@ public class Spotmanager : MonoBehaviour
     public void SetChildTicketed(int ticketedSpotIndex, bool ticketed) {
         childData[ticketedSpotIndex].ticketed = ticketed;
     }
+
+    public float GetFinTicketTime(int childIndex) {
+        return Sliderstruct[childIndex].finTicketTime;
+    }
+    public void SetFinTicketTime(int childIndex, float time) {
+        Sliderstruct[childIndex].finTicketTime = time;
+    }
+
     
 
     private void Update()
@@ -104,46 +123,57 @@ public class Spotmanager : MonoBehaviour
     
         if (Random.value < spawnChance)
         {
-            int randIndex = Random.Range(0, transform.childCount);
+            
+            int randIndex = Random.Range(0, numToSpawn);
+            while(!childData[randIndex].taken) {
+                randIndex = Random.Range(0, numToSpawn);
+
+            }
+
             Transform spot = transform.GetChild(randIndex);
-        
+            
+            Debug.Log("new spawn:" + spot);
             if (!GetChildData(randIndex).ticketed && randIndex != ticketedSpotIndex)
             {
                 // Start ticketing the spot if not already taken or ticketed
                 ticketedSpotIndex = randIndex;
                 ticketTimeRemaining = ticketTime;
-                spotSliders[ticketedSpotIndex].gameObject.SetActive(true);
+                Sliderstruct[ticketedSpotIndex].slider.SetActive(true);
+                SetFinTicketTime(ticketedSpotIndex,10);
+
             }
         }
 
-        if (ticketedSpotIndex != -1)
-        {
-            Transform spot = transform.GetChild(ticketedSpotIndex);
+        for(int i = 0; i < transform.childCount; i++) {
+            Transform spot = transform.GetChild(i);
 
-            if (ticketTimeRemaining <= 0f)
-            {
-                // Ticket time expired
-                SetChildTicketed(ticketedSpotIndex, true);
-                ticketedSpotIndex = -1;
-                ticketTimeRemaining = 0f;
-                spotSliders[ticketedSpotIndex].gameObject.SetActive(false);
-            }
-            else if (Input.GetKeyDown(KeyCode.E) && Vector2.Distance(player.transform.position, spot.position) <= ticketRange)
+            if (Input.GetKeyDown(KeyCode.E) && Vector2.Distance(player.transform.position, spot.position) <= ticketRange && GetFinTicketTime(i) > 0)
             {
                 // Ticket the spot
-                SetChildTicketed(ticketedSpotIndex, true);
+                SetChildTicketed(i, true);
                 score += 50;
 
                 // Reset ticketing state
-                ticketedSpotIndex = -1;
                 ticketTimeRemaining = 0f;
-                spotSliders[ticketedSpotIndex].gameObject.SetActive(false);
+                SetFinTicketTime(i,0);
+                Sliderstruct[i].slider.SetActive(false);
+                break;
+                
             }
-            else
-            {
-                // Update the ticket time remaining and slider
-                ticketTimeRemaining -= Time.deltaTime;
-                spotSliders[ticketedSpotIndex].value = ticketTimeRemaining / ticketTime;
+        }
+
+        for(int i = 0; i < numToSpawn; i++) {
+            float time1 = GetFinTicketTime(i);
+            if(time1 > 0) {
+
+                float time2 = Mathf.Clamp(time1 - Time.deltaTime, 0, 10);
+                SetFinTicketTime(i, time2);
+                
+
+                Sliderstruct[i].slider.transform.localScale = new Vector3(1.25f * (time2 / 10), 1f, 1f);
+
+            } else {
+                Sliderstruct[i].slider.SetActive(false);
             }
         }
     }
