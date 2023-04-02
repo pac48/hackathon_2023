@@ -15,6 +15,8 @@ public class CharacterController : MonoBehaviour
     private float currentSpeed = 0f;
 
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,34 +32,28 @@ public class CharacterController : MonoBehaviour
             currentSpeed = Mathf.MoveTowards(currentSpeed, moveSpeed, acceleration * Time.deltaTime);
             rb.velocity = transform.up * currentSpeed;
             reverse = false;
-      
         }
         else if (Input.GetKey(KeyCode.S))
         {
             currentSpeed = Mathf.MoveTowards(currentSpeed, -moveSpeed, acceleration * Time.deltaTime);
             rb.velocity = transform.up * currentSpeed;
             reverse = true;
-           
         }
         else
         {
             currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, deceleration * Time.deltaTime);
             rb.velocity = transform.up * currentSpeed;
-
         }
 
         // Rotate left/right if moving
         if(currentSpeed != 0f)
         {
-            
             if (Input.GetKey(KeyCode.A))
             {
                 if(reverse) {
                     transform.Rotate(-Vector3.forward * rotationSpeed * Time.deltaTime);
-
                 } else {
                     transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
-
                 }
             }
             else if (Input.GetKey(KeyCode.D))
@@ -66,9 +62,10 @@ public class CharacterController : MonoBehaviour
                     transform.Rotate(-Vector3.back * rotationSpeed * Time.deltaTime);
                 } else {
                     transform.Rotate(Vector3.back * rotationSpeed * Time.deltaTime);
-
                 }
             }
         }
+
+        
     }
 }
