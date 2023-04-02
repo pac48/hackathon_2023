@@ -4,6 +4,7 @@ using UnityEngine.AI;
 public class ParkingController : MonoBehaviour{
 
 private NavMeshAgent agent;
+public NavMeshObstacle obj;
     
 public Vector3 posTarget;
 public bool enable = false;
@@ -25,12 +26,16 @@ public bool enable = false;
 
     void Update()
     {
+        
+        obj.enabled = !enable;
         agent.enabled = enable;
-        if (enable)
+        if (!agent.enabled && enable)
         {
             agent.SetDestination(posTarget);
         }
-
+        
+        agent.enabled = enable;
+        
         
     }
 }
