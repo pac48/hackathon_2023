@@ -2,22 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class Spotmanager : MonoBehaviour
 {
     public Transform player;
+
+
     // The range in which the character can ticket an empty spot
-     public float ticketRange = 2f;
+    public float ticketRange = 2f;
     public int score = 0;
     private int ticketedSpotIndex = -1;
     private float ticketTimeRemaining = 0f;
     public float ticketTime = 5f;
-
     public float timeToSelect = 10f;
+
     
     public GameObject slider1;
     public float spawnRate = .05f;
-    public Vector3 offset1 = Vector3.up;
-    public Quaternion offset2 = Quaternion.Euler(0f, 180f, 0f);
+    public float offset1;
+    public Vector3 SpawnLocation;
     public int numToSpawn;
 
     public struct ChildData
@@ -55,18 +58,21 @@ public class Spotmanager : MonoBehaviour
         childData = new ChildData[childCount];
 
         // Loop through each child empty and store its position and default taken value
+        Sliderstruct = new SliderStruct[childCount];
         for (int i = 0; i < childCount; i++)
         {
             Transform child = transform.GetChild(i);
             childData[i].localPosition = child.localPosition;
             childData[i].localRotation = child.localRotation;
             childData[i].taken = false;
+            SpawnLocation = child.TransformDirection(Vector3.up) * offset1;
+            Sliderstruct[i].slider = Instantiate(slider1, child.transform.position + SpawnLocation, child.transform.rotation);
+            Sliderstruct[i].slider.transform.rotation *= Quaternion.Euler(0f,180f,0);
+            Sliderstruct[i].slider.SetActive(false);
+            
         }
-
         // Instantiate the prefab at a random position within the specified percentage of child transforms
         numToSpawn = Mathf.RoundToInt(childCount * (spawnPercentage / 100f));
-        Sliderstruct = new SliderStruct[numToSpawn];
-
         for (int i = 0; i < numToSpawn; i++)
         {
             int randIndex = Random.Range(0, childCount);
@@ -81,14 +87,7 @@ public class Spotmanager : MonoBehaviour
             Quaternion spawnRot = childData[randIndex].localRotation;
             Instantiate(prefab, spawnPos, spawnRot);
         }
-        //timers for the sliders behind the spots
-        for (int i = 0; i < transform.childCount; i++) {
-            Transform child = transform.GetChild(i);
-            Sliderstruct[i].transform = child;
-            Sliderstruct[i].slider = Instantiate(slider1, child.transform.position + offset1, Quaternion.Euler(0f,0f,0f));
-            Sliderstruct[i].slider.transform.rotation *= Quaternion.Euler(0f,180f,0);
-            Sliderstruct[i].slider.SetActive(false);
-        }
+
     
     }
 
@@ -113,6 +112,9 @@ public class Spotmanager : MonoBehaviour
     }
     public void SetFinTicketTime(int childIndex, float time) {
         Sliderstruct[childIndex].finTicketTime = time;
+    }
+    public void Setscore(int score1) {
+        score = score1;
     }
 
     
@@ -161,6 +163,7 @@ public class Spotmanager : MonoBehaviour
                 
             }
         }
+
 
         for(int i = 0; i < numToSpawn; i++) {
             float time1 = GetFinTicketTime(i);
