@@ -7,7 +7,6 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     public ScoreDisplay scoredisplay;
-    public TimerSlider timerslider;
     public TextMeshProUGUI position1;
     public TextMeshProUGUI score1;
     public TextMeshProUGUI name1;
@@ -20,7 +19,6 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI PlayerName;
     private GameObject text;
     public struct Scores
-    
     {
         public string name;
         public int score;
@@ -29,7 +27,6 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
-        float timeLeft = timerslider.currentTime;
         scores = new Scores[10];
         for (int i = 0; i < 10; i++)
         {
@@ -137,9 +134,7 @@ public class ScoreManager : MonoBehaviour
         submit = true;
     }
     public void Update()
-    {
-        timeLeft -= Time.deltaTime;
-        
+    {        
         if (submit && !ScoreAdded)
         {
             for(int i = 0; i < 10; i++) {
